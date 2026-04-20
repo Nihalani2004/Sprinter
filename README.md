@@ -62,8 +62,11 @@ Use these usernames at login:
 Open PowerShell and run:
 
 ```powershell
-cd "C:\Users\JAC_PC\Desktop\VI SEM\python lab\python project"
-python .\main.py
+cd project
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+python app.py
 ```
 
 If `python` is not found, try:
