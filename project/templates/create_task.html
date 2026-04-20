@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Create Task · Sprint Tracker{% endblock %}
+
+{% block content %}
+  <div class="header-row">
+    <div>
+      <h1>Create task</h1>
+      <p class="muted">Add a new task to an existing sprint and optionally assign it to a developer.</p>
+    </div>
+    <div class="actions">
+      <a class="btn btn--ghost" href="{{ url_for('manager_dashboard', username=username) }}">Back</a>
+    </div>
+  </div>
+
+  <div class="card card--narrow">
+    <h2 class="card__title">Task details</h2>
+    <form method="post" class="form">
+      <label class="field">
+        <span class="field__label">Sprint</span>
+        {% if sprints %}
+          <select class="select" name="sprint_id" required>
+            <option value="" disabled {% if not sprint_id %}selected{% endif %}>Select a sprint…</option>
+            {% for s in sprints %}
+              <option value="{{ s.sprint_id }}" {% if sprint_id == s.sprint_id %}selected{% endif %}>
+                {{ s.name }} (ID {{ s.sprint_id }})
+              </option>
+            {% endfor %}
+          </select>
+        {% else %}
+          <p class="muted">No sprints available. <a href="{{ url_for('create_sprint_page') }}">Create one first</a>.</p>
+        {% endif %}
+      </label>
+
+      <label class="field">
+        <span class="field__label">Task ID (unique within sprint)</span>
+        <input class="input" type="text" name="task_id" value="{{ task_id or '' }}" placeholder="e.g. T1" required />
+      </label>
+
+      <label class="field">
+        <span class="field__label">Title</span>
+        <input class="input" type="text" name="title" value="{{ title or '' }}" placeholder="e.g. Build login page" required />
+      </label>
+
+      <label class="field">
+        <span class="field__label">Description</span>
+        <textarea class="input" name="description" rows="3" placeholder="Brief description of the task…">{{ description or '' }}</textarea>
+      </label>
+
+      <label class="field">
+        <span class="field__label">Assign to developer (optional)</span>
+        <select class="select" name="assigned_to">
+          <option value="">— Unassigned —</option>
+          {% for dev in developers %}
+            <option value="{{ dev }}" {% if assigned_to == dev %}selected{% endif %}>{{ dev }}</option>
+          {% endfor %}
+        </select>
+      </label>
+
+      <div class="form__actions">
+        <button class="btn btn--primary" type="submit">Create task</button>
+        <a class="btn" href="{{ url_for('manager_dashboard', username=username) }}">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

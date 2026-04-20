@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Developer · Sprint Tracker{% endblock %}
+
+{% block content %}
+  <div class="header-row">
+    <div>
+      <h1>Developer dashboard</h1>
+      <p class="muted">Your assigned tasks, bugs reported against them, and quick status updates.</p>
+    </div>
+    <div class="actions">
+      <a class="btn btn--ghost" href="{{ url_for('developer_dashboard', username=username) }}">Refresh</a>
+    </div>
+  </div>
+
+  {% if tasks %}
+    <div class="stack">
+      {% for t in tasks %}
+        <div class="card">
+          <div class="task-card__top">
+            <div>
+              <div class="task-card__title">{{ t.title }}</div>
+              <div class="task-card__meta">
+                <span class="pill">Sprint #{{ t.sprint_id }}</span>
+                <span class="pill">Task #{{ t.task_id }}</span>
+                <span class="status status--{{ t.status|lower|replace(' ', '-') }}">{{ t.status }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="task-card__body">
+            <div class="cols">
+              <!-- Left: Update task status -->
+              <div class="col">
+                <div class="subhead">Update task status</div>
+                <form method="post" action="{{ url_for('developer_update_task_status') }}" class="form form--compact">
+                  <input type="hidden" name="sprint_id" value="{{ t.sprint_id }}" />
+                  <input type="hidden" name="task_id" value="{{ t.task_id }}" />
+                  <div class="inline-form">
+                    <select class="select" name="new_status" required>
+                      {% for st in task_status_flow %}
+                        <option value="{{ st }}" {% if st == t.status %}selected{% endif %}>{{ st }}</option>
+                      {% endfor %}
+                    </select>
+                    <button class="btn btn--primary btn--sm" type="submit">Save</button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Right: Bugs reported by tester -->
+              <div class="col">
+                <div class="subhead">Bugs ({{ t.bugs|length }})</div>
+                {% if t.bugs %}
+                  <div class="bug-list">
+                    {% for b in t.bugs %}
+                      <div class="bug">
+                        <div class="bug__main">
+                          <div class="bug__title">
+                            <span class="pill">Bug #{{ b.bug_id }}</span>
+                            <span class="status status--{{ b.status|lower }}">{{ b.status }}</span>
+                          </div>
+                          <div class="bug__desc">{{ b.description }}</div>
+                        </div>
+                        <form method="post" action="{{ url_for('developer_update_bug_status') }}" class="inline-form">
+                          <input type="hidden" name="sprint_id" value="{{ t.sprint_id }}" />
+                          <input type="hidden" name="task_id" value="{{ t.task_id }}" />
+                          <input type="hidden" name="bug_id" value="{{ b.bug_id }}" />
+                          <select class="select" name="new_status" required>
+                            {% for st in bug_status_flow %}
+                              <option value="{{ st }}" {% if st == b.status %}selected{% endif %}>{{ st }}</option>
+                            {% endfor %}
+                          </select>
+                          <button class="btn btn--sm" type="submit">Update</button>
+                        </form>
+                      </div>
+                    {% endfor %}
+                  </div>
+                {% else %}
+                  <p class="muted">No bugs reported for this task.</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="card">
+      <p class="muted">No tasks assigned to you yet.</p>
+    </div>
+  {% endif %}
+{% endblock %}

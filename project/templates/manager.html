@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Manager · Sprint Tracker{% endblock %}
+
+{% block content %}
+  <div class="header-row">
+    <div>
+      <h1>Manager dashboard</h1>
+      <p class="muted">Create sprints and review tasks across the project.</p>
+    </div>
+    <div class="actions">
+      <a class="btn btn--primary" href="{{ url_for('create_sprint_page') }}">Create sprint</a>
+      <a class="btn btn--primary" href="{{ url_for('create_task_page') }}">Create task</a>
+      <a class="btn" href="{{ url_for('view_tasks_page') }}">View tasks</a>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2 class="card__title">Sprints</h2>
+      {% if sprints %}
+        <div class="list">
+          {% for s in sprints %}
+            <div class="list__item">
+              <div class="list__main">
+                <div class="list__title">{{ s.name }}</div>
+                <div class="list__meta">
+                  <span class="pill">ID {{ s.sprint_id }}</span>
+                  <span class="pill">{{ s.duration_days }} days</span>
+                  <span class="pill">{{ s.tasks|length }} tasks</span>
+                </div>
+              </div>
+              <form class="list__action" method="post" action="{{ url_for('delete_sprint_page') }}"
+                    onsubmit="return confirm('Delete sprint &quot;{{ s.name }}&quot;? This will also remove all its tasks and bugs.')">
+                <input type="hidden" name="sprint_id" value="{{ s.sprint_id }}">
+                <button type="submit" class="btn btn--danger btn--sm">Delete</button>
+              </form>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="muted">No sprints yet. Create your first sprint to get started.</p>
+      {% endif %}
+    </div>
+
+    <div class="card">
+      <h2 class="card__title">Quick tips</h2>
+      <div class="kpi">
+        <div class="kpi__label">Task status flow</div>
+        <div class="kpi__value">Pending → In Progress → Testing → Completed</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi__label">Bug status flow</div>
+        <div class="kpi__value">Open → Fixed → Verified → Closed</div>
+      </div>
+      <p class="muted">
+        This web UI uses a SQLite database for persistent storage.
+      </p>
+    </div>
+  </div>
+{% endblock %}
+

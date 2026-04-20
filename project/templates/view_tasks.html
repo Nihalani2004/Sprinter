@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}View Tasks · Sprint Tracker{% endblock %}
+
+{% block content %}
+  <div class="header-row">
+    <div>
+      <h1>All tasks</h1>
+      <p class="muted">A project-wide view of tasks across sprints. Assign developers and review bugs.</p>
+    </div>
+    <div class="actions">
+      <a class="btn btn--primary" href="{{ url_for('create_task_page') }}">Create task</a>
+      <a class="btn btn--ghost" href="{{ url_for('manager_dashboard', username=username) }}">Back</a>
+    </div>
+  </div>
+
+  {% if tasks %}
+    <div class="stack">
+      {% for t in tasks %}
+        <div class="card">
+          <div class="task-card__top">
+            <div>
+              <div class="task-card__title">{{ t.title }}</div>
+              <div class="task-card__meta">
+                <span class="pill">Sprint #{{ t.sprint_id }}</span>
+                <span class="pill">Task #{{ t.task_id }}</span>
+                <span class="status status--{{ t.status|lower|replace(' ', '-') }}">{{ t.status }}</span>
+                <span class="pill">{{ t.bugs|length }} bug{{ 's' if t.bugs|length != 1 else '' }}</span>
+              </div>
+            </div>
+            <form method="post" action="{{ url_for('manager_assign_task') }}" class="inline-form">
+              <input type="hidden" name="sprint_id" value="{{ t.sprint_id }}" />
+              <input type="hidden" name="task_id" value="{{ t.task_id }}" />
+              <select class="select" name="assigned_to" style="min-width:110px">
+                <option value="">— Unassigned —</option>
+                {% for dev in developers %}
+                  <option value="{{ dev }}" {% if t.assigned_to == dev %}selected{% endif %}>{{ dev }}</option>
+                {% endfor %}
+              </select>
+              <button class="btn btn--primary btn--sm" type="submit">Assign</button>
+            </form>
+          </div>
+
+          {% if t.bugs %}
+            <div class="task-card__body">
+              <div class="subhead">Bug reports</div>
+              <div class="bug-list">
+                {% for b in t.bugs %}
+                  <div class="bug">
+                    <div class="bug__main">
+                      <div class="bug__title">
+                        <span class="pill">Bug #{{ b.bug_id }}</span>
+                        <span class="status status--{{ b.status|lower }}">{{ b.status }}</span>
+                      </div>
+                      <div class="bug__desc">{{ b.description }}</div>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="card">
+      <p class="muted">No tasks exist yet. <a href="{{ url_for('create_task_page') }}">Create your first task</a>.</p>
+    </div>
+  {% endif %}
+{% endblock %}

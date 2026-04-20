@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Tester · Sprint Tracker{% endblock %}
+
+{% block content %}
+  <div class="header-row">
+    <div>
+      <h1>Tester dashboard</h1>
+      <p class="muted">Tasks currently in testing, with bug tracking.</p>
+    </div>
+    <div class="actions">
+      <a class="btn btn--ghost" href="{{ url_for('tester_dashboard', username=username) }}">Refresh</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="card__title">Tasks in Testing</h2>
+    {% if tasks %}
+      <div class="stack">
+        {% for t in tasks %}
+          <div class="task-card">
+            <div class="task-card__top">
+              <div>
+                <div class="task-card__title">{{ t.title }}</div>
+                <div class="task-card__meta">
+                  <span class="pill">Sprint #{{ t.sprint_id }}</span>
+                  <span class="pill">Task #{{ t.task_id }}</span>
+                  <span class="pill">Assigned: {{ t.assigned_to }}</span>
+                  <span class="status status--testing">Testing</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-card__body">
+              <div class="cols">
+                <div class="col">
+                  <div class="subhead">Add bug</div>
+                  <form method="post" action="{{ url_for('tester_add_bug') }}" class="form form--compact">
+                    <input type="hidden" name="sprint_id" value="{{ t.sprint_id }}" />
+                    <input type="hidden" name="task_id" value="{{ t.task_id }}" />
+                    <label class="field">
+                      <span class="field__label">Bug description</span>
+                      <input class="input" type="text" name="description" placeholder="Describe the bug…" required />
+                    </label>
+                    <button class="btn btn--primary btn--sm" type="submit">Add</button>
+                  </form>
+                </div>
+
+                <div class="col">
+                  <div class="subhead">Bugs</div>
+                  {% if t.bugs %}
+                    <div class="bug-list">
+                      {% for b in t.bugs %}
+                        <div class="bug">
+                          <div class="bug__main">
+                            <div class="bug__title">
+                              <span class="pill">Bug #{{ b.bug_id }}</span>
+                              <span class="status status--{{ b.status|lower }}">{{ b.status }}</span>
+                            </div>
+                            <div class="bug__desc">{{ b.description }}</div>
+                          </div>
+                          <form method="post" action="{{ url_for('tester_update_bug_status') }}" class="inline-form">
+                            <input type="hidden" name="sprint_id" value="{{ t.sprint_id }}" />
+                            <input type="hidden" name="task_id" value="{{ t.task_id }}" />
+                            <input type="hidden" name="bug_id" value="{{ b.bug_id }}" />
+                            <select class="select" name="new_status" required>
+                              {% for st in bug_status_flow %}
+                                <option value="{{ st }}" {% if st == b.status %}selected{% endif %}>{{ st }}</option>
+                              {% endfor %}
+                            </select>
+                            <button class="btn btn--sm" type="submit">Update</button>
+                          </form>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                    <p class="muted">No bugs reported for this task yet.</p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="muted">No tasks are in testing right now.</p>
+    {% endif %}
+  </div>
+{% endblock %}

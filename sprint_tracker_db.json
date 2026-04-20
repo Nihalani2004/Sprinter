@@ -1,0 +1,122 @@
+{
+  "sprints": {
+    "1": {
+      "sprint_id": "1",
+      "name": "sprint1",
+      "duration_days": 1,
+      "tasks": {
+        "1": {
+          "id": "1",
+          "title": "fast",
+          "description": "ai",
+          "assigned_to": "dev1",
+          "status": "Completed",
+          "bugs": []
+        },
+        "T100": {
+          "id": "T100",
+          "title": "Build login page",
+          "description": "Create the login page UI",
+          "assigned_to": "dev1",
+          "status": "Testing",
+          "bugs": [
+            {
+              "bug_id": "2",
+              "description": "Login button not responding",
+              "status": "Open"
+            }
+          ]
+        }
+      }
+    },
+    "6": {
+      "sprint_id": "6",
+      "name": "build a login page",
+      "duration_days": 5,
+      "tasks": {
+        "T100": {
+          "id": "T100",
+          "title": "make the login page",
+          "description": "make the UI responsive",
+          "assigned_to": "dev1",
+          "status": "Testing",
+          "bugs": [
+            {
+              "bug_id": "1",
+              "description": "there is no responsiveness in UI",
+              "status": "Open"
+            }
+          ]
+        }
+      }
+    },
+    "8": {
+      "sprint_id": "8",
+      "name": "backend",
+      "duration_days": 5,
+      "tasks": {
+        "1": {
+          "id": "1",
+          "title": "build login",
+          "description": "hdhd",
+          "assigned_to": "dev1",
+          "status": "Testing",
+          "bugs": [
+            {
+              "bug_id": "3",
+              "description": "error in login",
+              "status": "Fixed"
+            }
+          ]
+        },
+        "13": {
+          "id": "13",
+          "title": "xyz",
+          "description": "ajgs",
+          "assigned_to": "dev2",
+          "status": "Pending",
+          "bugs": []
+        }
+      }
+    },
+    "9": {
+      "sprint_id": "9",
+      "name": "frontend",
+      "duration_days": 6,
+      "tasks": {
+        "12": {
+          "id": "12",
+          "title": "build login page",
+          "description": "login with mail and pass",
+          "assigned_to": "dev1",
+          "status": "Testing",
+          "bugs": [
+            {
+              "bug_id": "4",
+              "description": "there is error",
+              "status": "Fixed"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "users": {
+    "manager": {
+      "role": "Manager"
+    },
+    "dev1": {
+      "role": "Developer"
+    },
+    "dev2": {
+      "role": "Developer"
+    },
+    "tester": {
+      "role": "Tester"
+    }
+  },
+  "meta": {
+    "next_sprint_id": 10,
+    "next_bug_id": 5
+  }
+}

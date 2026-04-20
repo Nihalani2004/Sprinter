@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Create Sprint · Sprint Tracker{% endblock %}
+
+{% block content %}
+  <div class="header-row">
+    <div>
+      <h1>Create sprint</h1>
+      <p class="muted">Define a sprint name and duration in days.</p>
+    </div>
+    <div class="actions">
+      <a class="btn btn--ghost" href="{{ url_for('manager_dashboard', username=username) }}">Back</a>
+    </div>
+  </div>
+
+  <div class="card card--narrow">
+    <h2 class="card__title">Sprint details</h2>
+    <form method="post" class="form">
+      <label class="field">
+        <span class="field__label">Sprint name</span>
+        <input class="input" type="text" name="name" value="{{ name or '' }}" placeholder="e.g. Sprint 1" required />
+      </label>
+
+      <label class="field">
+        <span class="field__label">Duration (days)</span>
+        <input class="input" type="number" name="duration" value="{{ duration or '' }}" placeholder="e.g. 14" min="1" max="365" required />
+      </label>
+
+      <div class="form__actions">
+        <button class="btn btn--primary" type="submit">Create sprint</button>
+        <a class="btn" href="{{ url_for('manager_dashboard', username=username) }}">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}
+
