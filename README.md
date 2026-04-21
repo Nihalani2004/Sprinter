@@ -1,7 +1,7 @@
-# Software Development Sprint Tracker (CLI, Pure Python)
+# Software Development Sprint Tracker (Full-Stack Flask & React)
 
-A menu-driven **Agile Sprint → Tasks → Bugs → Status** tracker built with **pure Python** and **dictionaries** as the primary data structure.  
-Includes **role-based menus** (Manager / Developer / Tester) and optional **JSON save/load**.
+A modern **Agile Sprint → Tasks → Bugs → Status** tracker built with a **Flask** backend and a **React (Vite)** frontend.
+Includes **role-based dashboards** (Manager / Developer / Tester), real-time notifications, and persistent database storage.
 
 ---
 
@@ -32,18 +32,18 @@ Includes **role-based menus** (Manager / Developer / Tester) and optional **JSON
 
 ---
 
-## Project structure
+## Project Structure
 
 ```
 python project/
-├─ main.py        # Entry point + role-based CLI menus
-├─ data.py        # Dictionary “models”, status flows, transition checks
-├─ sprint.py      # Sprint create/list/view helpers
-├─ task.py        # Task create/assign/status/list helpers
-├─ bug.py         # Bug add/list/status helpers
-├─ user.py        # Roles + seeded users
-├─ storage.py     # JSON save/load helpers
-└─ sprint_tracker_db.json  # Created automatically after first save (if you run the app)
+├─ project/           # Flask Backend
+│  ├─ app.py          # Main Flask entry point
+│  ├─ models.py       # Database models
+│  └─ requirements.txt # Python dependencies
+├─ frontend/          # React Frontend (Vite)
+│  ├─ src/            # Components, Hooks, API services
+│  └─ package.json    # Node dependencies
+└─ README.md          # Project documentation
 ```
 
 ---
@@ -57,22 +57,35 @@ Use these usernames at login:
 
 ---
 
-## How to run (Windows / PowerShell)
+## How to Run
 
-Open PowerShell and run:
-
-```powershell
+### Open Terminal 1: Backend (Flask)
+```bash
 cd project
+
+# Create a virtual environment (recommended)
 python -m venv venv
+
+# Activate the virtual environment
+# For Windows:
 venv\Scripts\activate
+
+# Install the required Python packages
 pip install -r requirements.txt
+
+# Start the Flask backend server
 python app.py
 ```
 
-If `python` is not found, try:
+### Open Terminal 2: Frontend (React)
+```bash
+cd frontend
 
-```powershell
-py .\main.py
+# Install the required Node packages
+npm install
+
+# Start the React frontend server
+npm run dev
 ```
 
 ---
@@ -96,10 +109,10 @@ py .\main.py
 
 ---
 
-## Notes / design choices
-- The app uses a single shared dictionary called `project`:
-  - `project["sprints"]` stores multiple sprints
-  - Each sprint stores tasks in `sprint["tasks"]`
-  - Each task stores bugs in `task["bugs"]`
-- Status transitions are restricted to move **forward** in the defined flow.
+## Technical Notes
+- **Backend**: Flask with Flask-SQLAlchemy and Flask-SocketIO (for real-time updates).
+- **Frontend**: React with Material UI (MUI) and Vite.
+- **Database**: SQLite (local development).
+- **Real-time**: Socket.IO integration for instant notifications across the dashboard.
+- **Security**: Role-based access control and data isolation implemented at the API level.
 
